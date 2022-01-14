@@ -1,4 +1,5 @@
-function [fig_pubCurves,subPlotPanel] = plotMuscleCurves( felineSoleusNormMuscleCurves,...
+function [fig_pubCurves,subPlotPanel] = plotMuscleCurves(...
+                      felineSoleusNormMuscleCurves,...
                       activeForceLengthCurveAnnotationPoints,...
                       felineSoleusMusculotendonPropertiesUpd,...
                       felineSoleusSarcomerePropertiesUpd,...
@@ -33,6 +34,8 @@ function [fig_pubCurves,subPlotPanel] = plotMuscleCurves( felineSoleusNormMuscle
                      'lineColor',[],'lineWidth',[],...
                      'xlabel','', 'ylabel','','title','');
                    
+  flag_plotTitinCurves=0;
+
   %%
   % Data
   %%
@@ -376,6 +379,7 @@ function [fig_pubCurves,subPlotPanel] = plotMuscleCurves( felineSoleusNormMuscle
           'Herzog 2002',...
           'FontSize',8,...
           'Color',[0,0,1]);
+
     
     box off;
 
@@ -429,6 +433,7 @@ function [fig_pubCurves,subPlotPanel] = plotMuscleCurves( felineSoleusNormMuscle
     ylabel(plotProps(idx).ylabel);
     title(plotProps(idx).title);    
     
+if(flag_plotTitinCurves==1)    
   %%
   % Passive curve decomposition: total, ecm, titin
   %%    
@@ -945,7 +950,7 @@ function [fig_pubCurves,subPlotPanel] = plotMuscleCurves( felineSoleusNormMuscle
   title(plotProps(idx).title);   
    
   
-  
+end  
   here=1;
 
   figure(fig_pubCurves);  

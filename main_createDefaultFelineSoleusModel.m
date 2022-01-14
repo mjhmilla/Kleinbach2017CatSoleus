@@ -17,8 +17,9 @@ addpath(postprocessingDirectoryTree   );
 addpath('colornames/');
 
 
-[palette,rgb] = colornames('Alphabet');
-colorGuentherSchmittWank2007 = rgb(12,:);
+[names,rgb] = colornames('SVG','FireBrick');
+colorGuentherSchmittWank2007 = rgb;
+lineWidthGuentherSchmittWank2007=1.0;
 
 flag_useOctave = 0;
 flag_enableNumericallyNonZeroGradients    = 1;
@@ -303,10 +304,30 @@ if(flag_makeAndSavePubPlots==1)
    kseeL   = dFsee0/(dUseeL*lsee0);  
 
    disp('Tendon Parameters (Guenter, Schmitt, Wank (2007))');
-   fprintf('%1.7f\t%s\n',lsee0,'lSEE0');
-   fprintf('%1.7f\t%s\n',dUseeNL,'dUSEEnll');
-   fprintf('%1.7f\t%s\n',dUseeL,'duSEEl');
-   fprintf('%1.7f\t%s\n',dFsee0,'dFSEE0');
+   
+   str0=sprintf('%s %1.7f\n','lSEE0=',lsee0);
+   str1=sprintf('%s %1.7f\n','dUSEEnll=',dUseeNL);
+   str2=sprintf('%s %1.7f\n','duSEEl=',dUseeL);
+   str3=sprintf('%s %1.7f\n','dFSEE0=',dFsee0);
+   str03 = sprintf('%s\n\n%s%s%s%s','Tendon-Force-Length',str0,str1,str2,str3);
+   disp(str03);
+
+   textPosition= reshape(subPlotPanel(1,1,:),1,4);
+   textPosition(1,2) = textPosition(1,2)-textPosition(1,4)*1.25;
+
+   annotation('textbox', textPosition, 'string', str03,...
+     'Interpreter','latex','FontSize',8,'FitBoxToText','on',...
+     'EdgeColor','none');
+   hold on;
+
+   %text(0,-ymax,sprintf('%1.7f: %s\n',lsee0,'lSEE0'));
+   %hold on;
+   %text(0,-ymax-0.05*ydelta,sprintf('%1.7f: %s\n',dUseeNL,'dUSEEnll'));
+   %hold on;
+   %text(0,-ymax-0.1*ydelta,sprintf('%1.7f: %s\n',dUseeL,'duSEEl'));
+   %hold on;
+   %text(0,-ymax-0.15*ydelta,sprintf('%1.7f: %s\n',dFsee0,'dFSEE0'));
+   %hold on;
 
    npts=100;
    lt      = lsee0 + ([0:(1/(npts-1)):1]').*(dUsee*lsee0);
@@ -318,9 +339,14 @@ if(flag_makeAndSavePubPlots==1)
    ft(idxL,1)  = dFsee0 + kseeL.*(lt(idxL,:)-(lsee0+dUseeNL));
 
    
-   plot(lt./(lsee0), ft./(fIso),'Color',colorGuentherSchmittWank2007);
+   plot(lt./(lsee0), ft./(fIso),'Color',colorGuentherSchmittWank2007,...
+     'LineWidth',lineWidthGuentherSchmittWank2007);
    hold on;
 
+   text( 1.0, 0.9, 'Millard 2022','Color',[0,0,0]);
+   hold on;
+   text( 1.0, 0.85, 'G\"{u}nter 2007','Color',colorGuentherSchmittWank2007);
+   hold on;
    %%
    %Guenther, Schmitt, Wank 2007 active force length curve 
    %%
@@ -351,10 +377,20 @@ if(flag_makeAndSavePubPlots==1)
    nuCEasc = x(4,1);   
 
    disp('Active Force Length Parameters (Guenter, Schmitt, Wank (2007))');
-   fprintf('%1.7f\t%s\n',dWdes,'dWdes');
-   fprintf('%1.7f\t%s\n',nuCEdes,'nuCEdes');
-   fprintf('%1.7f\t%s\n',dWasc,'dWasc');
-   fprintf('%1.7f\t%s\n',nuCEasc,'nuCEasc');
+   str0=sprintf('%s=%1.7f\n','dWdes',dWdes);
+   str1=sprintf('%s=%1.7f\n','nuCEdes',nuCEdes);
+   str2=sprintf('%s=%1.7f\n','dWasc',dWasc);
+   str3=sprintf('%s=%1.7f\n','nuCEasc',nuCEasc);
+   str03 = sprintf('%s\n\n%s%s%s%s','Active-Force-Length',str0,str1,str2,str3);
+   %disp(str03);
+
+   %textPosition= reshape(subPlotPanel(1,2,:),1,4);
+   %textPosition(1,2) = textPosition(1,2)-textPosition(1,4)*1.25;
+
+   %annotation('textbox', textPosition, 'string', str03,...
+   %  'Interpreter','latex','FontSize',8,'FitBoxToText','on',...
+   %  'EdgeColor','none');
+   %hold on;
 
    npts=100;
    lce = ([0.5:((1.6-0.5)/(npts-1)):1.6]').*lopt;
@@ -365,7 +401,8 @@ if(flag_makeAndSavePubPlots==1)
    flN(idxAsc,1) = exp(-abs( ((lce(idxAsc,1)./lopt)-1)/(dWasc) ).^nuCEasc);
    flN(idxDes,1) = exp(-abs( ((lce(idxDes,1)./lopt)-1)/(dWdes) ).^nuCEdes);
 
-   plot(lce./lopt, flN,'Color',colorGuentherSchmittWank2007);
+   plot(lce./lopt, flN,'Color',colorGuentherSchmittWank2007,...
+     'LineWidth',lineWidthGuentherSchmittWank2007);
    hold on;
 
    %%
@@ -416,14 +453,25 @@ if(flag_makeAndSavePubPlots==1)
         end
    end
 
-   plot(lceN,fpe./fIso,'Color',colorGuentherSchmittWank2007);
+   plot(lceN,fpe./fIso,'Color',colorGuentherSchmittWank2007,...
+     'LineWidth',lineWidthGuentherSchmittWank2007);
    hold on;
 
    disp('Parallel Elastic Element Parameters (Guenter, Schmitt, Wank (2007))');
-   fprintf('%1.7f\t%s\n',nuPee,'nuPee');
-   fprintf('%1.7f\t%s\n',fpee,'fpee');
-   fprintf('%1.7f\t%s\n',dWdes,'dWdes');
-   fprintf('%1.7f\t%s\n',ellPee0,'ellPee0');
+   str4=sprintf('%s=%1.7f\n','nuPee',nuPee);
+   str5=sprintf('%s=%1.7f\n','fpee',fpee);
+   str6=sprintf('%s=%1.7f\n','dWdes',dWdes);
+   str7=sprintf('%s=%1.7f\n','ellPee0',ellPee0);
+   str07 = sprintf('%s\n%s\n\n%s%s%s%s',str03,'Passive-Force-Length',str4,str5,str6,str7);
+   disp(str07);
+
+   textPosition= reshape(subPlotPanel(1,2,:),1,4);
+   textPosition(1,2) = textPosition(1,2)-textPosition(1,4)*1.25;
+
+   annotation('textbox', textPosition, 'string', str07,...
+     'Interpreter','latex','FontSize',8,'FitBoxToText','on',...
+     'EdgeColor','none');
+   hold on;
 
    %%
    %Guenther, Schmitt, Wank 2007 force-velocity curve 
@@ -458,12 +506,22 @@ if(flag_makeAndSavePubPlots==1)
    Feec  = x(4,1);
 
    disp('Force Velocity Parameters (Guenter, Schmitt, Wank (2007))');
-   fprintf('%1.7f\t%s\n',Arel0,'Arel0');
-   fprintf('%1.7f\t%s\n',Brel0,'Brel0');
-   fprintf('%1.7f\t%s\n',Seec,'Seec');
-   fprintf('%1.7f\t%s\n',Feec,'Feec');
-   fprintf('%1.7f\t%s\n',vmaxN,'vmaxN');
+   str0=sprintf('%s=%1.7f\n','Arel0',Arel0);
+   str1=sprintf('%s=%1.7f\n','Brel0',Brel0);
+   str2=sprintf('%s=%1.7f\n','Seec',Seec);
+   str3=sprintf('%s=%1.7f\n','Feec',Feec);
+   str4=sprintf('%s=%1.7f\n','vmaxN',vmaxN);
 
+   str04 = sprintf('%s\n\n%s%s%s%s%s','Force-Velocity',str0,str1,str2,str3,str4);
+   disp(str04);
+
+   textPosition= reshape(subPlotPanel(1,3,:),1,4);
+   textPosition(1,2) = textPosition(1,2)-textPosition(1,4)*1.25;
+
+   annotation('textbox', textPosition, 'string', str04,...
+     'Interpreter','latex','FontSize',8,'FitBoxToText','on',...
+     'EdgeColor','none');
+   hold on;   
 
    %Constants
    q     = 1;
@@ -498,10 +556,11 @@ if(flag_makeAndSavePubPlots==1)
     end
    end
 
-   plot(vceN,fv./fIso,'Color',colorGuentherSchmittWank2007);
+   plot(vceN,fv./fIso,'Color',colorGuentherSchmittWank2007,...
+     'LineWidth',lineWidthGuentherSchmittWank2007);
    hold on;
 
-   print('-dpdf', [pubOutputFolder,'fig_Pub_MuscleCurves.pdf']); 
+   print('-dpdf', [pubOutputFolder,'fig_Pub_CatSoleusCurves.pdf']); 
    here=1;
 end
 
