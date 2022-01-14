@@ -377,6 +377,7 @@ if(flag_makeAndSavePubPlots==1)
    nuCEasc = x(4,1);   
 
    disp('Active Force Length Parameters (Guenter, Schmitt, Wank (2007))');
+
    str0=sprintf('%s=%1.7f\n','dWdes',dWdes);
    str1=sprintf('%s=%1.7f\n','nuCEdes',nuCEdes);
    str2=sprintf('%s=%1.7f\n','dWasc',dWasc);
@@ -444,7 +445,10 @@ if(flag_makeAndSavePubPlots==1)
 
    npts=100;
    lceN = [ellPee0*0.5:(1.4-ellPee0*0.5)/(npts-1):1.4]';
-   lce  = lceN.*lopt;
+   lce  = lceN.*lopt;   alphaOpt=felineSoleusMusculotendonPropertiesUpd.pennationAngle;
+   vmax = felineSoleusMusculotendonPropertiesUpd.maximumNormalizedFiberVelocity;
+
+
    fpe  = zeros(size(lce));
 
    for i=1:1:length(lce)
@@ -462,7 +466,17 @@ if(flag_makeAndSavePubPlots==1)
    str5=sprintf('%s=%1.7f\n','fpee',fpee);
    str6=sprintf('%s=%1.7f\n','dWdes',dWdes);
    str7=sprintf('%s=%1.7f\n','ellPee0',ellPee0);
-   str07 = sprintf('%s\n%s\n\n%s%s%s%s',str03,'Passive-Force-Length',str4,str5,str6,str7);
+
+   alphaOpt=felineSoleusMusculotendonPropertiesUpd.pennationAngle;
+   vmax = felineSoleusMusculotendonPropertiesUpd.maximumNormalizedFiberVelocity;
+   strA0 = sprintf('%s=%1.7f(rad)\n','(alpha)',alphaOpt);
+   strA1 = sprintf('%s=%1.7f(m)\n','(lopt)',lopt);
+   strA2 = sprintf('%s=%1.7f(m)\n','lCEopt',lopt*cos(alphaOpt));   
+   strA3 = sprintf('%s=%1.7f(lo/s)\n','vmax',vmax);
+   strA4 = sprintf('%s=%1.7f(N)','Fmax',fIso);   
+   strA04 = sprintf('%s\n%s%s%s%s%s','Basic Properties',strA0,strA1,strA2,strA3,strA4);
+   
+   str07 = sprintf('%s\n\n%s\n%s\n\n%s%s%s%s',strA04,str03,'Passive-Force-Length',str4,str5,str6,str7);
    disp(str07);
 
    textPosition= reshape(subPlotPanel(1,2,:),1,4);
